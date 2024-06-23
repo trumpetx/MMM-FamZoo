@@ -1,40 +1,84 @@
 Module.register("MMM-Famzoo", {
   defaults: {
-    webdriver: 'chromium',
     title: 'Famzoo Balances',
     loginPage: 'https://app.famzoo.com/ords/f?p=197:101:0:::::',
     showLastUpdated: true,
     columnOrder: ['balance', 'account'],
-    updatePeriod: 1000 * 60 * 60,
+    updatePeriod: 1000 * 60 * 1,
     family: undefined,
     username: undefined,
     password: undefined,
   },
   start: function () {
+    this.resetBalances();
+  },
+  resetBalances: function () {
     this.famzooData = {
       accountNames: [],
       balances: []
     };
-    if (this.isConfigured()) {
-      this.sendSocketNotification("INIT", this.config);
-    }
   },
   isConfigured: function () {
     return this.config.family && this.config.username && this.config.password;
   },
+  updateData: function() {
+    this.resetBalances();
+    const webview = document.getElementById('fz-webview');
+    webview.executeJavaScript(`function login(){
+        document.getElementById('fzi_signin_famname').value = '${this.config.family}';
+        document.getElementById('fzi_signin_memname').value = '${this.config.username}';
+        document.getElementById('fzi_signin_password').value = '${this.config.password}';
+        document.getElementById('fzi_signin_bsignin').click();
+      } login();`);
+    setTimeout(() => {
+      webview.executeJavaScript(`function mobileUi(){
+        [].slice.call(document.getElementById('fzcntlbar').children).filter(el => el.text === 'MOBILE UI')[0].click();
+      } mobileUi();`)
+    }, 4000);
+    setTimeout(() => {
+      webview.executeJavaScript(`function getAccounts() {
+        return new Promise((resolve, reject) => { resolve([].slice.call(document.getElementsByClassName('name')).map(el => el.innerText)) });
+      } getAccounts();`).then(arr => {
+        this.famzooData.accountNames = arr.map(el => el.replace(/\s*(\[\*+\d+\]|\[IOU\])$/, ""));
+      }).catch(e => {
+        Log.error(e);
+        this.famzooData.accountNames = [];
+      })
+    }, 5000);
+    setTimeout(() => {
+      webview.executeJavaScript(`function getAccounts() {
+        return new Promise((resolve, reject) => { resolve([].slice.call(document.getElementsByClassName('credit')).filter(el => el.tagName==='SPAN').map(el => el.innerText) ) });
+      } getAccounts();`).then(arr => {
+        this.famzooData.balances = arr;
+      }).catch(e => {
+        Log.error(e);
+        this.famzooData.balances = [];
+      });
+    }, 5000);
+    setTimeout(() => { this.updateDom() }, 5250);
+  },
   getDom: function () {
-    const element = document.createElement("div");
-    element.className = "fz-container";
+    if(!(config.electronOptions && config.electronOptions.webPreferences && config.electronOptions.webPreferences.webviewTag)){
+      const error = document.createElement('div');
+      error.innerText = "See documentation, add 'electronOptions'";
+      error.className = 'fz-error';
+      return error;
+    }
     if (!this.isConfigured()) {
-      element.className += ' fz-error';
-      element.innerText = 'Set family, username, and password in config.js';
-      return element;
+      const error = document.createElement('div');
+      error.innerText = 'Set family, username, and password in config.js';
+      error.className = 'fz-error';
+      return error;
     }
-    if (this.famzooData.error) {
-      element.className += ' fz-error';
-      element.innerText = this.famzooData.error;
-      return element;
-    }
+    const element = document.createElement('div');
+    const webview = document.createElement('webview');
+    webview.id = 'fz-webview';
+    webview.className = 'fz-webview';
+    webview.setAttribute('src', this.config.loginPage);
+    setTimeout(() => { this.updateData(this.config) }, this.runOnce ? this.config.updatePeriod : 3000);
+    this.runOnce = true;
+    element.appendChild(webview);
+
     const title = document.createElement('h2');
     title.innerText = 'Loading...';
     title.className = 'fz-title';
@@ -54,14 +98,14 @@ Module.register("MMM-Famzoo", {
         account.innerText = this.famzooData.accountNames[i];
         const balance = document.createElement('td');
         balance.innerText = this.famzooData.balances[i];
-        this.config.columnOrder.forEach((col, i) => {
+        this.config.columnOrder.forEach((col, j) => {
           switch (col) {
             case 'account':
-              account.className = `fz-show-${i}`;
+              account.className = `fz-show-${j}`;
               row.appendChild(account);
               break;
             case 'balance':
-              balance.className = `fz-show-${i}`;
+              balance.className = `fz-show-${j}`;
               row.appendChild(balance);
               break;
           }
@@ -81,16 +125,4 @@ Module.register("MMM-Famzoo", {
   getStyles: function () {
     return ["MMM-Famzoo.css"];
   },
-  socketNotificationReceived: function (notification, payload) {
-    switch (notification) {
-      case "BALANCES_REFRESHED":
-      case "BALANCE_REFRESH_FAILED":
-        this.famzooData = payload;
-        this.updateDom();
-        setTimeout(() => this.sendSocketNotification("REFRESH"), this.config.updatePeriod);
-        break;
-      default:
-        Log.error(`Unknown notification: ${notification}`, payload);
-    }
-  }
 })

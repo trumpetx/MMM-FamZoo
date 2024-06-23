@@ -1,19 +1,19 @@
 ## Overview
-This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display Famzoo account balances (a paid financial education service).  Because Famzoo does not provide a public API, this module uses [Selenium](https://github.com/SeleniumHQ/selenium/tree/trunk/javascript/node/selenium-webdriver#readme) to scrape the data from the Famzoo website by logging in with your family name, username & password.  It does this in the background (headless) using Chromium by default.
+This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display Famzoo account balances (a paid financial education service).  Because Famzoo does not provide a public API, this module uses a hidden WebView in the Magic Mirror² Electron framework to scrape the data from the Famzoo website by logging in with your family name, username & password.  There are no 3rd party dependencies.
 
-![Famzoo Balances](image.png)
+![Famzoo Balances](famzoo_balances_example.png)
 
 ## Installation
-
+Clone the git repository
 ```
 cd MagicMirror/modules
 git clone https://github.com/trumpetx/MMM-Famzoo.git
-cd MMM-Famzoo
-npm install
 ```
-Add the following block to the modules section in `config/config.js`
+Modify `config/config.js`
 ```
 modules: [
+
+  // Add the MMM-Famzoo definition
   {
     module: "MMM-Famzoo",
     position: "top_left",
@@ -24,20 +24,23 @@ modules: [
     }
   },
 ]
+
+// Add/modify the electronOptions
+electronOptions: {
+  webPreferences: {
+    webviewTag: true,
+  },
+},
 ```
 
 ## Additioanl Configuration
-
 In addition to the required family/username/password configuration, there are some optional configuraions you can use
-```json
+```
 {
   // Required
   family: 'Smith',
   username: 'Sue',
   password: 'bL0wF!$h1',
-
-  // Only 'chromium' (default) and 'chrome' have been tested; firefox or edge may work, but they probably need additional configuration
-  webdriver: 'chromium',
 
   // There is no i18n yet (or likely, ever)
   title: 'Famzoo Balances',
@@ -55,7 +58,6 @@ In addition to the required family/username/password configuration, there are so
   updatePeriod: 1000 * 60 * 60,
 }
 ```
-
 
 ## Disclaimer
 This project is not associated with [Famzoo](https://famzoo.com) in any way.  We're just fans of the service and highly recommend it to anyone with kids who get allowance.

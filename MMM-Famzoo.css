@@ -1,4 +1,5 @@
-.fz-container {}
+.fz-container { width: 640px; height: 480px; background-color: white; }
+.fz-webview { width: 640px; height: 480px; display: none; }
 .fz-title {}
 .fz-data {}
 .fz-row {}

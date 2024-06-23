@@ -2,8 +2,5 @@
     "name": "MMM-Famzoo",
     "version": "1.0.0",
     "description": "Display Famzoo balances",
-    "author": "David Greene",
-    "dependencies": {
-      "selenium-webdriver": "^4.22.0"
-    }
-  }
+    "author": "David Greene"
+}
