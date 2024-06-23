@@ -1,0 +1,8 @@
+.fz-container {}
+.fz-title {}
+.fz-data {}
+.fz-row {}
+.fz-show-0 { text-align: right; }
+.fz-show-1 { padding-left: 10px; }
+.fz-last-updated {}
+.fz-error { color: red; font-weight: bold; }
