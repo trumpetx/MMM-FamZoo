@@ -5,6 +5,7 @@ Module.register("MMM-Famzoo", {
     showLastUpdated: true,
     columnOrder: ['balance', 'account'],
     updatePeriod: 1000 * 60 * 1,
+    sleepDelay: 3000,
     family: undefined,
     username: undefined,
     password: undefined,
@@ -34,7 +35,7 @@ Module.register("MMM-Famzoo", {
       webview.executeJavaScript(`function mobileUi(){
         [].slice.call(document.getElementById('fzcntlbar').children).filter(el => el.text === 'MOBILE UI')[0].click();
       } mobileUi();`)
-    }, 4000);
+    }, this.config.sleepDelay);
     setTimeout(() => {
       webview.executeJavaScript(`function getAccounts() {
         return new Promise((resolve, reject) => { resolve([].slice.call(document.getElementsByClassName('name')).map(el => el.innerText)) });
@@ -44,18 +45,18 @@ Module.register("MMM-Famzoo", {
         Log.error(e);
         this.famzooData.accountNames = [];
       })
-    }, 5000);
+    }, this.config.sleepDelay * 2);
     setTimeout(() => {
-      webview.executeJavaScript(`function getAccounts() {
+      webview.executeJavaScript(`function getBalances() {
         return new Promise((resolve, reject) => { resolve([].slice.call(document.getElementsByClassName('credit')).filter(el => el.tagName==='SPAN').map(el => el.innerText) ) });
-      } getAccounts();`).then(arr => {
+      } getBalances();`).then(arr => {
         this.famzooData.balances = arr;
       }).catch(e => {
         Log.error(e);
         this.famzooData.balances = [];
       });
-    }, 5000);
-    setTimeout(() => { this.updateDom() }, 5250);
+    }, this.config.sleepDelay * 2);
+    setTimeout(() => { this.updateDom() }, this.config.sleepDelay * 2 + 1000);
   },
   getDom: function () {
     if(!(config.electronOptions && config.electronOptions.webPreferences && config.electronOptions.webPreferences.webviewTag)){
@@ -75,7 +76,7 @@ Module.register("MMM-Famzoo", {
     webview.id = 'fz-webview';
     webview.className = 'fz-webview';
     webview.setAttribute('src', this.config.loginPage);
-    setTimeout(() => { this.updateData(this.config) }, this.runOnce ? this.config.updatePeriod : 3000);
+    setTimeout(() => { this.updateData(this.config) }, this.runOnce ? this.config.updatePeriod : this.config.sleepDelay);
     this.runOnce = true;
     element.appendChild(webview);
 

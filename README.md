@@ -11,29 +11,38 @@ git clone https://github.com/trumpetx/MMM-Famzoo.git
 ```
 Modify `config/config.js`
 ```
-modules: [
+let config = {
 
-  // Add the MMM-Famzoo definition
-  {
-    module: "MMM-Famzoo",
-    position: "top_left",
-    config: {
-      family: 'Smith',
-      username: 'Sue',
-      password: 'bL0wF!$h1',
-    }
-  },
-]
+  ...
 
-// Add/modify the electronOptions
-electronOptions: {
-  webPreferences: {
-    webviewTag: true,
-  },
-},
+  modules: [
+
+    ...
+
+    // Add the MMM-Famzoo definition
+    {
+      module: "MMM-Famzoo",
+      position: "top_left",
+      config: {
+        family: 'Smith',
+        username: 'Sue',
+        password: 'bL0wF!$h1',
+      }
+    },
+  ],
+
+  ...
+
+  // Add/modify the electronOptions
+  electronOptions: {
+    webPreferences: {
+      webviewTag: true,
+    },
+  }
+}
 ```
 
-## Additioanl Configuration
+## Additional Configuration
 In addition to the required family/username/password configuration, there are some optional configuraions you can use
 ```
 {
@@ -56,6 +65,9 @@ In addition to the required family/username/password configuration, there are so
 
   // Every hour by default
   updatePeriod: 1000 * 60 * 60,
+
+  // Increase this value if you're running on slow hardware (like an RPi 2)
+  sleepDelay: 3000,
 }
 ```
 
