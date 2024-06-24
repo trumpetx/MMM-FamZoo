@@ -1,5 +1,5 @@
 ## Overview
-This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display Famzoo account balances (a paid financial education service).  Because Famzoo does not provide a public API, this module uses a hidden WebView in the Magic Mirror² Electron framework to scrape the data from the Famzoo website by logging in with your family name, username & password.  There are no 3rd party dependencies.
+This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display [Famzoo](https://famzoo.com) account balances (a paid financial education service).  Because [Famzoo](https://famzoo.com) does not provide a public API, this module uses a hidden WebView in the [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) [Electron](https://github.com/electron/electron) framework to scrape the data from the Famzoo website by logging in with your family name, username & password.  There are no 3rd party dependencies.
 
 ![Famzoo Balances](famzoo_balances_example.png)
 
