@@ -4,7 +4,7 @@ Module.register("MMM-Famzoo", {
     loginPage: 'https://app.famzoo.com/ords/f?p=197:101:0:::::',
     showLastUpdated: true,
     columnOrder: ['balance', 'account'],
-    updatePeriod: 1000 * 60 * 1,
+    updatePeriod: 1000 * 60 * 60,
     sleepDelay: 3000,
     family: undefined,
     username: undefined,
