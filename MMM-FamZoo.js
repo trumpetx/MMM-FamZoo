@@ -1,7 +1,7 @@
-Module.register("MMM-Famzoo", {
+Module.register("MMM-FamZoo", {
   defaults: {
-    title: 'Famzoo Balances',
-    loginPage: 'https://app.famzoo.com/ords/f?p=197:101:0:::::',
+    title: 'FamZoo Balances',
+    loginPage: 'https://famzoo.com/signin',
     showLastUpdated: true,
     columnOrder: ['balance', 'account'],
     updatePeriod: 1000 * 60 * 60,
@@ -124,6 +124,6 @@ Module.register("MMM-Famzoo", {
     return element;
   },
   getStyles: function () {
-    return ["MMM-Famzoo.css"];
+    return ["MMM-FamZoo.css"];
   },
 })

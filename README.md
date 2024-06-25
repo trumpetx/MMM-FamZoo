@@ -1,13 +1,13 @@
 ## Overview
-This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display [Famzoo](https://famzoo.com) account balances (a paid financial education service).  Because [Famzoo](https://famzoo.com) does not provide a public API, this module uses a hidden WebView in the [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) [Electron](https://github.com/electron/electron) framework to scrape the data from the Famzoo website by logging in with your family name, username & password.  There are no 3rd party dependencies.
+This project is a [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) module which enables your Magic Mirror to display [FamZoo](https://famzoo.com) account balances (a paid financial education service).  Because [FamZoo](https://famzoo.com) does not provide a public API, this module uses a hidden WebView in the [Magic Mirror²](https://github.com/MagicMirrorOrg/MagicMirror) [Electron](https://github.com/electron/electron) framework to scrape the data from the FamZoo website by logging in with your family name, username & password.  There are no 3rd party dependencies.
 
-![Famzoo Balances](famzoo_balances_example.png)
+![FamZoo Balances](famzoo_balances_example.png)
 
 ## Installation
 Clone the git repository
 ```
 cd MagicMirror/modules
-git clone https://github.com/trumpetx/MMM-Famzoo.git
+git clone https://github.com/trumpetx/MMM-FamZoo.git
 ```
 Modify `config/config.js`
 ```
@@ -19,9 +19,9 @@ let config = {
 
     ...
 
-    // Add the MMM-Famzoo definition
+    // Add the MMM-FamZoo definition
     {
-      module: "MMM-Famzoo",
+      module: "MMM-FamZoo",
       position: "top_left",
       config: {
         family: 'Smith',
@@ -52,10 +52,10 @@ In addition to the required family/username/password configuration, there are so
   password: 'bL0wF!$h1',
 
   // There is no i18n yet (or likely, ever)
-  title: 'Famzoo Balances',
+  title: 'FamZoo Balances',
 
   // This should likely never be changed unless famzoo.com updates something later
-  loginPage: 'https://app.famzoo.com/ords/f?p=197:101:0:::::',
+  loginPage: 'https://famzoo.com/signin',
 
   // Set to false to avoid displaying the last updated timestamp
   showLastUpdated: true,
@@ -72,4 +72,4 @@ In addition to the required family/username/password configuration, there are so
 ```
 
 ## Disclaimer
-This project is not associated with [Famzoo](https://famzoo.com) in any way.  We're just fans of the service and highly recommend it to anyone with kids who get allowance.
+This project is not associated with [FamZoo](https://famzoo.com) in any way.  We're just fans of the service and highly recommend it to anyone with kids who get allowance.
