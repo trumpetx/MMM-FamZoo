@@ -9,6 +9,7 @@ Module.register("MMM-FamZoo", {
     family: undefined,
     username: undefined,
     password: undefined,
+    excludeAccounts: []
   },
   start: function () {
     this.resetBalances();
@@ -93,10 +94,14 @@ Module.register("MMM-FamZoo", {
       table.className = 'fz-data';
       element.appendChild(table);
       for (let i = 0; i < this.famzooData.accountNames.length; i++) {
+        const accountName = this.famzooData.accountNames[i];
+        if (this.config.excludedAccounts.includes(accountName)){
+          continue;
+        }
         const row = document.createElement('tr');
         row.className = 'fz-row';
         const account = document.createElement('td');
-        account.innerText = this.famzooData.accountNames[i];
+        account.innerText = accountName;
         const balance = document.createElement('td');
         balance.innerText = this.famzooData.balances[i];
         this.config.columnOrder.forEach((col, j) => {

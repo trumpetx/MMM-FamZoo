@@ -68,6 +68,9 @@ In addition to the required family/username/password configuration, there are so
 
   // Increase this value if you're running on slow hardware (like an RPi 2)
   sleepDelay: 3000,
+
+  // Removing any accounts that you do not want to display balances for
+  excludeAccounts: ["Dad"],
 }
 ```
 
